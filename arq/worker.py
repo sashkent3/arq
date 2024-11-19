@@ -406,7 +406,7 @@ class Worker:
         """
         async with self.pool.pipeline(transaction=True) as pipe:
             pipe.zrange(abort_jobs_ss, start=0, end=-1)
-            pipe.zremrangebyscore(abort_jobs_ss, min=timestamp_ms() + abort_job_max_age, max=float('inf'))
+            pipe.zremrangebyscore(abort_jobs_ss, min=0, max=timestamp_ms() - abort_job_max_age)
             abort_job_ids, _ = await pipe.execute()
 
         aborted: Set[str] = set()
